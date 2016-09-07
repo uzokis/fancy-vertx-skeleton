@@ -1,0 +1,86 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+    }
+}
+
+// PROJECT SETTINGS
+plugins {
+	id 'java' 
+	id 'eclipse' //or your favorite IDE
+	id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+group = 'eu.fancybrackets.skeleton'
+version = '0.0.1'
+
+def versions = [
+    vertx: '3.2.1',
+    //cassandra: '3.1.0'
+]
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+// DEPENDENCIES
+dependencies {
+    compile group: 'io.vertx', name: 'vertx-core', version: "$versions.vertx"
+    compile group: 'io.vertx', name: 'vertx-web', version: "$versions.vertx"
+    // ENABLE FOR AUTHENTICATION VIA SHIRO
+    //compile "io.vertx:vertx-auth-shiro:$versions.vertx"
+    //compile "io.vertx:vertx-auth-common:$version.vertx"
+    compile group: 'com.google.inject', name: 'guice', version: '4.0'
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    
+    // ENABLE FOR CASSANDRA
+    // slf4j & metrics-core needed by cassandra-driver
+    //compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
+    //compile group: 'io.dropwizard.metrics', name: 'metrics-core', version: '3.1.2'
+    //compile ('com.datastax.cassandra:cassandra-driver-core:$version.cassandra:shaded@jar') {
+    //  exclude group: 'io.netty' //by group
+    //} 
+    //compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: "$version.cassandra"
+
+    //TEST DEPENDENCIES
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.+'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.1.11'
+    testCompile group: 'io.vertx', name: 'vertx-unit', version: "$versions.vertx"
+}
+
+// BUNDLING JAR WITH SHADOWJAR
+shadowJar {
+    classifier = 'fat'
+    manifest {
+        attributes 'Main-Class': 'io.vertx.core.Launcher'
+        attributes 'Main-Verticle': 'eu.fancybrackets.template.verticle.MainVerticle'
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.0'
+}
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+// CONVENIENCE TASK TO RUN THE JAR DIRECTLY IN BUILD CONSOLE AND OUTPUT FINE LOGGING
+task runJar(dependsOn:shadowJar) << {
+    javaexec { 
+        main="-jar"
+        args =  [
+            "build/libs/$rootProject.name-$version-fat.jar"
+                ]
+        jvmArgs '-Djava.util.logging.config.file=logger.properties'
+    } 
+}
