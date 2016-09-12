@@ -11,8 +11,9 @@ This is a [Vert.x](http://vertx.io/) skeleton project with some basics pre-setup
 # Getting started
 
   - `gradlew eclipse` - generates project files to import the project into eclipse (Edit [build.gradle](https://github.com/uzokis/fancy-vertx-skeleton/blob/master/build.gradle) if you want another IDE)
-  - `gradlew runjar` - convencience task to run the Vert.x project (Edit [build.gradle](https://github.com/uzokis/fancy-vertx-skeleton/blob/master/build.gradle) if you want to adjust the arguments)
   - `gradlew clean build -x test` - clean & build the project, don't run the tests
+  - `gradlew runJar` - convencience task to run the Vert.x project (Edit [build.gradle](https://github.com/uzokis/fancy-vertx-skeleton/blob/master/build.gradle) if you want to adjust the arguments)
+  - After `runJar` navigate to http://localhost:8080/swanson to see an awesome [Ron Swanson quote](https://github.com/jamesseanwright/ron-swanson-quotes)
 
 # What to find where
 
