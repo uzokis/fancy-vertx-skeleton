@@ -16,6 +16,7 @@ This is a [Vert.x](http://vertx.io/) skeleton project with some basics pre-setup
   - `gradlew runJar` - convencience task to run the Vert.x project (Edit [build.gradle](https://github.com/uzokis/fancy-vertx-skeleton/blob/master/build.gradle) if you want to adjust the arguments)
   - After `runJar` navigate to http://localhost:8080/swanson to see an awesome [Ron Swanson quote](https://github.com/jamesseanwright/ron-swanson-quotes)
   - `gradlew generateJooq` - convencience task to run the JOOQ code-generator (Edit [jooq-config.xml](https://github.com/uzokis/fancy-vertx-skeleton/blob/master/jooq-config.xml) to adjust behaviour)
+
 # What to find where
 
   - [build.gradle](https://github.com/uzokis/fancy-vertx-skeleton/blob/master/build.gradle) - Gradle build file
