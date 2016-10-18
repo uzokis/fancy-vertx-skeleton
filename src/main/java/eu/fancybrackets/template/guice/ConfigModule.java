@@ -1,12 +1,5 @@
 package eu.fancybrackets.template.guice;
 
-import io.vertx.core.Context;
-import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.http.HttpClient;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.Router;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,10 +9,23 @@ import java.net.URL;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
+
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import io.vertx.core.Context;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpClient;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.Router;
 
 public class ConfigModule extends AbstractModule {
 	public static final String RON_SWANSON_API_URL = "RonSwansonAPIURL";
@@ -63,5 +69,17 @@ public class ConfigModule extends AbstractModule {
 	@Named(RON_SWANSON_API_URL)
 	public URL RonSwansonAPIURL() throws MalformedURLException {
 		return new URL(config.getString(RON_SWANSON_API_URL));
+	}
+	
+	@Provides
+	public DSLContext provideDSLContext() {
+		//TODO move to config
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl("jdbc:postgresql://localhost:26257/skeleton");
+		config.setUsername("fancyuser");
+		config.setPassword("");
+
+		HikariDataSource ds = new HikariDataSource(config);
+		return DSL.using(ds, SQLDialect.POSTGRES);
 	}
 }

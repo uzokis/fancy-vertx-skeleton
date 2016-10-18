@@ -18,7 +18,7 @@ version = '0.0.1'
 
 def versions = [
     vertx: '3.2.1',
-    //cassandra: '3.1.0'
+    jooq: '3.8.4'
 ]
 
 repositories {
@@ -37,15 +37,14 @@ dependencies {
     //compile "io.vertx:vertx-auth-common:$version.vertx"
     compile group: 'com.google.inject', name: 'guice', version: '4.0'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    
-    // ENABLE FOR CASSANDRA
-    // slf4j & metrics-core needed by cassandra-driver
-    //compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
-    //compile group: 'io.dropwizard.metrics', name: 'metrics-core', version: '3.1.2'
-    //compile ('com.datastax.cassandra:cassandra-driver-core:$version.cassandra:shaded@jar') {
-    //  exclude group: 'io.netty' //by group
-    //} 
-    //compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: "$version.cassandra"
+
+    //SQL LAYER    
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
+    compile "org.jooq:jooq:$versions.jooq"
+    compile "org.jooq:jooq-meta:$versions.jooq"
+    compile "org.jooq:jooq-codegen:$versions.jooq"
+    compile "com.zaxxer:HikariCP:2.4.+"//ludicrous speed connection pool
+    compile "org.postgresql:postgresql:9.4.+"//compatible/recommended with/for cockroach    
 
     //TEST DEPENDENCIES
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.+'
@@ -80,6 +79,19 @@ task runJar(dependsOn:shadowJar) << {
         main="-jar"
         args =  [
             "build/libs/$rootProject.name-$version-fat.jar"
+                ]
+        jvmArgs '-Djava.util.logging.config.file=logger.properties'
+    } 
+}
+
+// TASK TO RUN THE JOOQ CODE GENERATION
+// TODO check again vs cockroachdb when following is fixed: https://github.com/cockroachdb/cockroach/pull/9991 
+task generateJooq() << {
+    javaexec { 
+    	classpath = sourceSets.main.runtimeClasspath
+        main="org.jooq.util.GenerationTool"
+        args =  [
+            "./jooq-config.xml"
                 ]
         jvmArgs '-Djava.util.logging.config.file=logger.properties'
     } 
