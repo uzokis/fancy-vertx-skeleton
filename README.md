@@ -1,12 +1,12 @@
 # About
 
-This is a [Vert.x](http://vertx.io/) skeleton project with some basics pre-setup:
+This is a [Vert.x](http://vertx.io/) skeleton project with some basics pre-setup (most of them could be easily swapped):
 
   - [Gradle](https://gradle.org/) as build tool
   - [Shadow](http://imperceptiblethoughts.com/shadow/) plugin for fat jar creation
   - [JUL](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) starting point
   - [Guice](https://github.com/google/guice) for dependency injection
-  - [JOOQ](http://www.jooq.org/) as persistence layer
+  - [JOOQ](http://www.jooq.org/) as persistence layer (configured for CockroachDB/PostgreSQL)
   - An example verticle & accompanying integration test using [WireMock](http://wiremock.org/)
 
 # Getting started
