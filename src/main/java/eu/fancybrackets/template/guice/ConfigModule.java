@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.sql.DataSource;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -48,6 +50,7 @@ public class ConfigModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bind(Vertx.class).toInstance(vertx);
 		// TODO your configuration
 	}
 
@@ -72,14 +75,21 @@ public class ConfigModule extends AbstractModule {
 	}
 	
 	@Provides
-	public DSLContext provideDSLContext() {
+	@Singleton
+	public DataSource provideDataSource() {
 		//TODO move to config
 		HikariConfig config = new HikariConfig();
-		config.setJdbcUrl("jdbc:postgresql://localhost:26257/skeleton");
-		config.setUsername("fancyuser");
+		config.setJdbcUrl("jdbc:postgresql://localhost:5432/skeleton");
+		config.setUsername("postgres");
 		config.setPassword("");
-
+		
 		HikariDataSource ds = new HikariDataSource(config);
+		return ds;
+	}
+	
+	@Provides
+	@Inject
+	public DSLContext provideDSLContext(DataSource ds) {
 		return DSL.using(ds, SQLDialect.POSTGRES);
 	}
 }
