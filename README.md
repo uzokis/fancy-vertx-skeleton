@@ -1,4 +1,5 @@
 # About
+[![Build Status](https://travis-ci.org/uzokis/fancy-vertx-skeleton.svg?branch=master)](https://travis-ci.org/uzokis/fancy-vertx-skeleton)
 
 This is a [Vert.x](http://vertx.io/) skeleton project with some basics pre-setup (most of them could be easily swapped):
 
@@ -8,8 +9,6 @@ This is a [Vert.x](http://vertx.io/) skeleton project with some basics pre-setup
   - [Guice](https://github.com/google/guice) for dependency injection
   - [JOOQ](http://www.jooq.org/) as persistence layer (configured for CockroachDB/PostgreSQL)
   - An example verticle & accompanying integration test using [WireMock](http://wiremock.org/)
-
-[![Build Status](https://travis-ci.org/uzokis/fancy-vertx-skeleton.svg?branch=master)](https://travis-ci.org/uzokis/fancy-vertx-skeleton)
 
 # Getting started
 
